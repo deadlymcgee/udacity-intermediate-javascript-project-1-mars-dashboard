@@ -2,6 +2,8 @@ let store = {
     user: { name: "Student" },
     apod: '',
     rovers: ['Curiosity', 'Opportunity', 'Spirit'],
+    roverData: [],
+    isLoaded: false,
 }
 
 // add our markup to the page
@@ -26,6 +28,9 @@ const App = (state) => {
         <main>
             ${Greeting(store.user.name)}
             <section>
+                ${RoverList()}
+            </section>
+            <section>
                 <h3>Put things on the page!</h3>
                 <p>Here is an example section.</p>
                 <p>
@@ -49,6 +54,25 @@ window.addEventListener('load', () => {
 })
 
 // ------------------------------------------------------  COMPONENTS
+const Rover = (rover) => {
+    return `
+        <h1>${rover}</h1>
+    `
+}
+
+const RoverList = () => {
+    const { isLoaded } = store
+
+    if (!isLoaded) {
+        getRovers(store)
+    }
+
+    return `
+        <div>
+            ${store.roverData.map(rover => Rover(rover)).join('')}
+        </div>
+    `
+}
 
 // Pure function that renders conditional information -- THIS IS JUST AN EXAMPLE, you can delete it.
 const Greeting = (name) => {
@@ -92,6 +116,16 @@ const ImageOfTheDay = (apod) => {
 }
 
 // ------------------------------------------------------  API CALLS
+const getRovers = (state) => {
+    let { rovers } = state
+
+    // fetch(`http://localhost:3000/rovers`)
+    //     .then(res => res.json())
+    //     .then(rovers => updateStore(store, { rovers }))
+    updateStore(store, {isLoaded: true, roverData: ["rover1", "rover2", "rover3"]})
+
+    return data
+}
 
 // Example API call
 const getImageOfTheDay = (state) => {
