@@ -2,7 +2,7 @@ let store = Immutable.Map({
     user: Immutable.Map({ name: "Student" }),
     apod: '',
     rovers: Immutable.List(['Curiosity', 'Opportunity', 'Spirit']),
-    roverData: [],
+    roverData: Immutable.List([]),
     isLoaded: false,
 })
 
@@ -48,7 +48,7 @@ const Rover = (rover) => {
 }
 
 const RoverList = () => {
-    const { isLoaded, rovers } = store.toJS()
+    const { isLoaded, roverData } = store.toJS()
 
     if (!isLoaded) {
         getRovers(store)
@@ -56,7 +56,7 @@ const RoverList = () => {
 
     return `
         <div>
-            ${rovers.map(rover => Rover(rover)).join('')}
+            ${roverData.map(rover => Rover(rover)).join('')}
         </div>
     `
 }
@@ -103,13 +103,21 @@ const ImageOfTheDay = (apod) => {
 }
 
 // ------------------------------------------------------  API CALLS
-const getRovers = (state) => {
-    let { rovers } = state.toJS()
-
-    // fetch(`http://localhost:3000/rovers`)
-    //     .then(res => res.json())
-    //     .then(rovers => updateStore(store, { rovers }))
-    updateStore(store, {isLoaded: true, rovers: ["rover1", "rover2", "rover3"]})
+const getRovers = async (state) => {
+    const { rovers } = state.toJS()
+    const promises = rovers.map(rover => {
+        return fetch(`http://localhost:3000/rover`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({rover: rover})
+        })
+            .then(res => res.json())
+            .then(rover => rover)
+    })
+    const roverData = await Promise.all(promises)
+    updateStore(store, {isLoaded: true, roverData: roverData})
 
     return data
 }
