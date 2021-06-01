@@ -1,16 +1,16 @@
-let store = {
-    user: { name: "Student" },
+let store = Immutable.Map({
+    user: Immutable.Map({ name: "Student" }),
     apod: '',
-    rovers: ['Curiosity', 'Opportunity', 'Spirit'],
+    rovers: Immutable.List(['Curiosity', 'Opportunity', 'Spirit']),
     roverData: [],
     isLoaded: false,
-}
+})
 
 // add our markup to the page
 const root = document.getElementById('root')
 
-const updateStore = (store, newState) => {
-    store = Object.assign(store, newState)
+const updateStore = (state, newState) => {
+    store = state.merge(newState)
     render(root, store)
 }
 
@@ -21,12 +21,12 @@ const render = async (root, state) => {
 
 // create content
 const App = (state) => {
-    let { rovers, apod } = state
+    let { rovers, apod, user } = state.toJS()
 
     return `
         <header></header>
         <main>
-            ${Greeting(store.user.name)}
+            ${Greeting(user.name)}
             <section>
                 ${RoverList()}
             </section>
@@ -61,7 +61,7 @@ const Rover = (rover) => {
 }
 
 const RoverList = () => {
-    const { isLoaded } = store
+    const { isLoaded, rovers } = store.toJS()
 
     if (!isLoaded) {
         getRovers(store)
@@ -69,7 +69,7 @@ const RoverList = () => {
 
     return `
         <div>
-            ${store.roverData.map(rover => Rover(rover)).join('')}
+            ${rovers.map(rover => Rover(rover)).join('')}
         </div>
     `
 }
@@ -97,7 +97,7 @@ const ImageOfTheDay = (apod) => {
 
     console.log(photodate.getDate() === today.getDate());
     if (!apod || apod.date === today.getDate() ) {
-        getImageOfTheDay(store)
+        getImageOfTheDay()
     }
 
     // check if the photo of the day is actually type video!
@@ -117,19 +117,18 @@ const ImageOfTheDay = (apod) => {
 
 // ------------------------------------------------------  API CALLS
 const getRovers = (state) => {
-    let { rovers } = state
+    let { rovers } = state.toJS()
 
     // fetch(`http://localhost:3000/rovers`)
     //     .then(res => res.json())
     //     .then(rovers => updateStore(store, { rovers }))
-    updateStore(store, {isLoaded: true, roverData: ["rover1", "rover2", "rover3"]})
+    updateStore(store, {isLoaded: true, rovers: ["rover1", "rover2", "rover3"]})
 
     return data
 }
 
 // Example API call
-const getImageOfTheDay = (state) => {
-    let { apod } = state
+const getImageOfTheDay = () => {
 
     fetch(`http://localhost:3000/apod`)
         .then(res => res.json())
