@@ -15,13 +15,34 @@ app.use('/', express.static(path.join(__dirname, '../public')))
 // your API calls
 app.post('/rover', async (req, res) => {
     try {
-        const rover = await fetch(`https://api.nasa.gov/mars-photos/api/v1/rovers/${req.body.rover}/photos?sol=1000&api_key=${process.env.API_KEY}`)
+        // get the manifest
+        const { photo_manifest } = await fetch(`https://api.nasa.gov/mars-photos/api/v1/manifests/${req.body.rover}?api_key=${process.env.API_KEY}`)
             .then(res => res.json())
-        res.send({ rover: rover })
+
+        // retrieve the desired information
+        const rover = getRoverDetails(photo_manifest)
+
+        // get the photos
+        const { photos } = await fetch(`https://api.nasa.gov/mars-photos/api/v1/rovers/${req.body.rover}/photos?sol=${photo_manifest.max_sol}&api_key=${process.env.API_KEY}`)
+            .then(res => res.json())
+        rover.photos = photos
+        res.send(rover)
+
     } catch (err) {
         console.log('error:', err);
     }
 })
+
+const getRoverDetails = (manifest) => {
+    const { name, status, max_date, launch_date, landing_date  } = manifest
+    return {
+        name: name,
+        status: status,
+        recentDate: max_date,
+        launchDate: launch_date,
+        landingDate: landing_date
+    }
+}
 
 // example API call
 app.get('/apod', async (req, res) => {
@@ -34,4 +55,4 @@ app.get('/apod', async (req, res) => {
     }
 })
 
-app.listen(port, () => console.log(`Example app listening on port ${port}!`))
+app.listen(port, () => console.log(`Mars Dashboard app listening on port ${port}!`))
