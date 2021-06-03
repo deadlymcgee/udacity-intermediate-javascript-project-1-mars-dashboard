@@ -27,7 +27,7 @@ const getRoverDetails = (name) => {
 
 // create content
 const App = (state) => {
-    let { rovers, apod, user, isLoaded } = state.toJS()
+    let { rovers, apod, user, isLoaded, currentRover } = state.toJS()
 
     if (!isLoaded) {
         getRovers(store)
@@ -37,12 +37,7 @@ const App = (state) => {
         <header></header>
         <main>
             ${Greeting(user.name)}
-            <section>
-                ${rovers.map(rover => Rover(rover)).join('')}
-            </section>
-            <section>
-                ${RoverDetails()}
-            </section>
+            ${RoverDashboard(isLoaded, rovers, currentRover)}
         </main>
         <footer></footer>
     `
@@ -60,13 +55,23 @@ const Rover = (rover) => {
     `
 }
 
-const RoverDetails = () => {
-    const { isLoaded, currentRover } = store.toJS()
+const RoverMenu = (rovers) => {
+    return `${rovers.map(rover => Rover(rover)).join('')}`
+}
 
+const RoverDetails = (currentRover) => {
+
+    return (currentRover ? `<h1>Rover ${currentRover.name} details</h1>` : 'Please select a rover')
+}
+
+const RoverDashboard = (isLoaded, rovers, currentRover) => {
     if (!isLoaded) {
         return 'Loading rover data ...'
     }
-    return (currentRover ? `<h1>Rover ${currentRover.name} details</h1>` : 'Please select a rover')
+    return `
+        <section>${RoverMenu(rovers)}</section>
+        <section>${RoverDetails(currentRover)}</section>
+    `
 }
 
 // Pure function that renders conditional information -- THIS IS JUST AN EXAMPLE, you can delete it.
