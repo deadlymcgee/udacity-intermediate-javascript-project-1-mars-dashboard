@@ -34,7 +34,7 @@ const App = (state) => {
         <main>
             ${Greeting(user.name)}
             <section>
-                ${RoverList()}
+                ${rovers.map(rover => Rover(rover)).join('')}
             </section>
             <section>
                 ${isLoaded ? RoverDetails() : ''}
@@ -52,7 +52,7 @@ window.addEventListener('load', () => {
 // ------------------------------------------------------  COMPONENTS
 const Rover = (rover) => {
     return `
-        <h1 onclick="getRoverDetails('${rover.name}')">${rover.name}</h1>
+        <h1 onclick="getRoverDetails('${rover}')">${rover}</h1>
     `
 }
 
