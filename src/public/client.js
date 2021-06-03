@@ -43,7 +43,7 @@ window.addEventListener('load', () => {
 // ------------------------------------------------------  COMPONENTS
 const Rover = (rover) => {
     return `
-        <h1>${rover}</h1>
+        <h1>${rover.name}</h1>
     `
 }
 
@@ -52,6 +52,7 @@ const RoverList = () => {
 
     if (!isLoaded) {
         getRovers(store)
+        return 'Loading rover list ...'
     }
 
     return `
