@@ -29,6 +29,10 @@ const getRoverDetails = (name) => {
 const App = (state) => {
     let { rovers, apod, user, isLoaded } = state.toJS()
 
+    if (!isLoaded) {
+        getRovers(store)
+    }
+
     return `
         <header></header>
         <main>
@@ -37,7 +41,7 @@ const App = (state) => {
                 ${rovers.map(rover => Rover(rover)).join('')}
             </section>
             <section>
-                ${isLoaded ? RoverDetails() : ''}
+                ${RoverDetails()}
             </section>
         </main>
         <footer></footer>
@@ -56,24 +60,12 @@ const Rover = (rover) => {
     `
 }
 
-const RoverList = () => {
-    const { isLoaded, roverData } = store.toJS()
+const RoverDetails = () => {
+    const { isLoaded, currentRover } = store.toJS()
 
     if (!isLoaded) {
-        getRovers(store)
-        return 'Loading rover list ...'
+        return 'Loading rover data ...'
     }
-
-    return `
-        <div>
-            ${roverData.map(rover => Rover(rover)).join('')}
-        </div>
-    `
-}
-
-const RoverDetails = () => {
-    const { currentRover } = store.toJS()
-
     return (currentRover ? `<h1>Rover ${currentRover.name} details</h1>` : 'Please select a rover')
 }
 
