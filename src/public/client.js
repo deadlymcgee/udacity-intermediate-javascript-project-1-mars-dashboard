@@ -10,7 +10,7 @@ let store = Immutable.Map({
 const root = document.getElementById('root')
 
 const updateStore = (state, newState) => {
-    store = state.merge(newState)
+    store = store.merge(newState)
     render(root, store)
 }
 
@@ -18,10 +18,16 @@ const render = async (root, state) => {
     root.innerHTML = App(state)
 }
 
+const getRoverDetails = (name) => {
+    console.log(`getting rover ${name} details!`)
+    const roverDetails = store.toJS().roverData.find(rover => rover.name === name)
+    updateStore({}, {currentRover: roverDetails, isRoverDetails: true})
+}
+
 
 // create content
 const App = (state) => {
-    let { rovers, apod, user } = state.toJS()
+    let { rovers, apod, user, isLoaded } = state.toJS()
 
     return `
         <header></header>
@@ -29,6 +35,9 @@ const App = (state) => {
             ${Greeting(user.name)}
             <section>
                 ${RoverList()}
+            </section>
+            <section>
+                ${isLoaded ? RoverDetails() : ''}
             </section>
         </main>
         <footer></footer>
@@ -43,7 +52,7 @@ window.addEventListener('load', () => {
 // ------------------------------------------------------  COMPONENTS
 const Rover = (rover) => {
     return `
-        <h1>${rover.name}</h1>
+        <h1 onclick="getRoverDetails('${rover.name}')">${rover.name}</h1>
     `
 }
 
@@ -60,6 +69,12 @@ const RoverList = () => {
             ${roverData.map(rover => Rover(rover)).join('')}
         </div>
     `
+}
+
+const RoverDetails = () => {
+    const { currentRover } = store.toJS()
+
+    return (currentRover ? `<h1>Rover ${currentRover.name} details</h1>` : 'Please select a rover')
 }
 
 // Pure function that renders conditional information -- THIS IS JUST AN EXAMPLE, you can delete it.
