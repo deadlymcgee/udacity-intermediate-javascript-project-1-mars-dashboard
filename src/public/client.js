@@ -59,9 +59,34 @@ const RoverMenu = (rovers) => {
     return `${rovers.map(rover => Rover(rover)).join('')}`
 }
 
+const RoverPhoto = (photo) => {
+    return `
+        <img src="${photo.img_src}"/>
+    `
+}
+
 const RoverDetails = (currentRover) => {
 
-    return (currentRover ? `<h1>Rover ${currentRover.name} details</h1>` : 'Please select a rover')
+    return (
+        currentRover ?
+            `
+                <h1>Rover ${currentRover.name} details</h1>
+                <div>
+                   Launch Date: ${currentRover.launchDate}
+                </div>
+                   Landing Date: ${currentRover.landingDate}
+                <div>
+                   Status: ${currentRover.status}
+                </div>
+                <div>
+                   Most Recent Photos Date: ${currentRover.recentDate} 
+                </div>
+                <div>
+                    ${currentRover.photos.map(photo => RoverPhoto(photo)).join('')}
+                </div>
+            ` :
+            'Please select a rover'
+    )
 }
 
 const RoverDashboard = (isLoaded, rovers, currentRover) => {
