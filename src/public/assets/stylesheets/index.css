@@ -20,6 +20,20 @@ footer {
   /* footer styles */
 }
 
+#rover-menu {
+  display: flex;
+  justify-content: space-evenly;
+  width: 100%;
+  background-color: lightskyblue;
+}
+
+.rover-menu-item {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 0.5em;
+}
+
 #rover-photos {
   display: flex;
   flex-direction: column;
@@ -47,6 +61,7 @@ footer {
 @media (min-width: 1224px) {
   /* use mobile */
   main {
+    width: 1000px;
     max-width: 1000px;
     margin: 0 auto;
   }

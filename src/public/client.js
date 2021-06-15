@@ -51,12 +51,18 @@ window.addEventListener('load', () => {
 // ------------------------------------------------------  COMPONENTS
 const Rover = (rover) => {
     return `
-        <h1 onclick="getRoverDetails('${rover}')">${rover}</h1>
+        <div class="rover-menu-item">
+            <h1 onclick="getRoverDetails('${rover}')">${rover}</h1>
+        </div>
     `
 }
 
 const RoverMenu = (rovers) => {
-    return `${rovers.map(rover => Rover(rover)).join('')}`
+    return `
+        <nav id="rover-menu">
+            ${rovers.map(rover => Rover(rover)).join('')}
+        </nav>
+    `
 }
 
 const RoverPhoto = (photo) => {
@@ -94,7 +100,7 @@ const RoverDashboard = (isLoaded, rovers, currentRover) => {
         return 'Loading rover data ...'
     }
     return `
-        <section>${RoverMenu(rovers)}</section>
+        ${RoverMenu(rovers)}
         <section>${RoverDetails(currentRover)}</section>
     `
 }
