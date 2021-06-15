@@ -61,7 +61,7 @@ const RoverMenu = (rovers) => {
 
 const RoverPhoto = (photo) => {
     return `
-        <img src="${photo.img_src}"/>
+        <img class="rover-photo" src="${photo.img_src}"/>
     `
 }
 
@@ -81,7 +81,7 @@ const RoverDetails = (currentRover) => {
                 <div>
                    Most Recent Photos Date: ${currentRover.recentDate} 
                 </div>
-                <div>
+                <div id="rover-photos">
                     ${currentRover.photos.map(photo => RoverPhoto(photo)).join('')}
                 </div>
             ` :

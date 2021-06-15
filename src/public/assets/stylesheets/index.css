@@ -20,15 +20,36 @@ footer {
   /* footer styles */
 }
 
+#rover-photos {
+  display: flex;
+  flex-direction: column;
+}
+
+.rover-photo {
+  margin: 0.5em;
+}
 /* -------------------  TABLET  --------------------- */
 @media (min-width: 768px) {
   /* use mobile */
+  #rover-photos {
+    flex-direction: row;
+    flex-wrap: wrap;
+  }
+
+  .rover-photo {
+    min-width: 300px;
+    max-width: 300px;
+  }
 }
 
 /* -------------------  DESKTOP  -------------------- */
 
 @media (min-width: 1224px) {
   /* use mobile */
+  main {
+    max-width: 1000px;
+    margin: 0 auto;
+  }
 }
 
 /* -------------------  LARGE SCREENS  -------------- */
