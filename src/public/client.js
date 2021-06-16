@@ -55,10 +55,10 @@ const Rover = (rover) => {
     `
 }
 
-const RoverMenu = (rovers) => {
+const RoverMenu = (Component, rovers) => {
     return `
         <nav id="rover-menu">
-            ${rovers.map(rover => Rover(rover)).join('')}
+            ${rovers.map(rover => Component(rover)).join('')}
         </nav>
     `
 }
@@ -69,7 +69,7 @@ const RoverPhoto = (photo) => {
     `
 }
 
-const RoverDetails = (currentRover) => {
+const RoverDetails = (Component, currentRover) => {
 
     return (
         currentRover ?
@@ -86,7 +86,7 @@ const RoverDetails = (currentRover) => {
                    Most Recent Photos Date: ${currentRover.recentDate} 
                 </div>
                 <div id="rover-photos">
-                    ${currentRover.photos.map(photo => RoverPhoto(photo)).join('')}
+                    ${currentRover.photos.map(photo => Component(photo)).join('')}
                 </div>
             ` :
             'Please select a rover'
@@ -98,8 +98,8 @@ const RoverDashboard = (isLoaded, rovers, currentRover) => {
         return 'Loading rover data ...'
     }
     return `
-        ${RoverMenu(rovers)}
-        <section>${RoverDetails(currentRover)}</section>
+        ${RoverMenu(Rover, rovers)}
+        <section>${RoverDetails(RoverPhoto, currentRover)}</section>
     `
 }
 
@@ -119,6 +119,4 @@ const getRovers = async (state) => {
     })
     const roverData = await Promise.all(promises)
     updateStore(store, {isLoaded: true, roverData: roverData})
-
-    return data
 }
