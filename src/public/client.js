@@ -19,7 +19,6 @@ const render = async (root, state) => {
 }
 
 const getRoverDetails = (name) => {
-    console.log(`getting rover ${name} details!`)
     const roverDetails = store.toJS().roverData.find(rover => rover.name === name)
     updateStore({}, {currentRover: roverDetails, isRoverDetails: true})
 }
