@@ -54,6 +54,7 @@ footer {
   #rover-photos {
     flex-direction: row;
     flex-wrap: wrap;
+    justify-content: center;
   }
 
   .rover-photo {
