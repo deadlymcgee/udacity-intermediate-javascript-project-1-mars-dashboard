@@ -25,8 +25,7 @@ app.post('/rover', async (req, res) => {
         // get the photos
         const { photos } = await fetch(`https://api.nasa.gov/mars-photos/api/v1/rovers/${req.body.rover}/photos?sol=${photo_manifest.max_sol}&api_key=${process.env.API_KEY}`)
             .then(res => res.json())
-        rover.photos = photos
-        res.send(rover)
+        res.send(Object.assign({}, rover, {photos: photos}))
 
     } catch (err) {
         console.log('error:', err);
