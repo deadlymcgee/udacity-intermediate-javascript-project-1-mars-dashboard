@@ -49,8 +49,8 @@ window.addEventListener('load', () => {
 // ------------------------------------------------------  COMPONENTS
 const Rover = (rover) => {
     return `
-        <div class="rover-menu-item">
-            <h4 onclick="getRoverDetails('${rover}')">${rover}</h4>
+        <div class="rover-menu-item" onclick="getRoverDetails('${rover}')">
+            <h4>${rover}</h4>
         </div>
     `
 }
